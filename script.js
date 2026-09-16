@@ -1,0 +1,14 @@
+let title = "My new project";
+let screens = "Простые, Сложные, Интерактивные";
+let screenPrice = 258.67;
+let rollback = 75;
+let fullPrice = 250000;
+let adaptive = true;
+console.log('typeof title:', typeof title);
+console.log('typeof fullPrice: ', typeof fullPrice);
+console.log('typeof adaptive: ', typeof adaptive);
+console.log('screens length: ', screens.length);
+console.log("Стоимость верстки экранов (" + screenPrice + ") рублей");
+console.log("Стоимость разработки сайта (" + fullPrice + ") рублей");
+console.log('screens lower case array: ', screens.toLowerCase().split(', '));
+console.log('Процент отката посреднику за работу ' + fullPrice * (rollback / 100));
