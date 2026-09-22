@@ -1,0 +1,20 @@
+let bookList = document.querySelector('.books')
+let books = document.querySelectorAll('.book')
+bookList.append(books[2])
+bookList.prepend(books[1])
+books[3].before(books[4])
+document.querySelector('body').style.backgroundImage = "url('image/you-dont-know-js.jpg')"
+books[4].querySelector('a').text = 'Книга 3. this и Прототипы Объектов'
+document.querySelector('.adv').remove()
+let listOf2Book = books[0].querySelectorAll('li')
+listOf2Book[3].after(listOf2Book[6])
+listOf2Book[6].after(listOf2Book[8])
+listOf2Book[9].after(listOf2Book[2])
+let listOf5Book = books[5].querySelectorAll('li')
+listOf5Book[3].before(listOf5Book[9])
+listOf5Book[5].after(listOf5Book[2])
+listOf5Book[7].after(listOf5Book[5])
+const newElement = document.createElement('li')
+newElement.textContent = 'Глава 8: За пределами ES6'
+books[2].append(newElement)
+books[2].querySelectorAll('li')[8].after(books[2].querySelectorAll('li')[10])
