@@ -15,6 +15,7 @@ const total = document.querySelector('#total')
 const fullTotal = document.querySelector('#total-full-count')
 const totalOther = document.querySelector('#total-count-other')
 const totalRollBack = document.querySelector('#total-count-rollback')
+const screenCount = document.querySelector('#total-count')
 
 const appData = {
 	rollback: 0,
@@ -28,6 +29,7 @@ const appData = {
 	servicePricesPercent: 0,
 	servicePricesNumber: 0,
 	servicePercentPrice: 0,
+	screenCount: 0,
 	init: function() {
 		
 		appData.addTitle()
@@ -72,6 +74,7 @@ const appData = {
 		totalOther.value = appData.servicePricesPercent + appData.servicePricesNumber
 		fullTotal.value = appData.fullPrice
 		totalRollBack.value = appData.servicePercentPrice
+		screenCount.value = appData.screenCount
 	},
 	addTitle: function () {
 		document.title = title.textContent
@@ -108,7 +111,8 @@ const appData = {
 			appData.screens.push({ 
 				id: index, 
 				name: selectName, 
-				price: +input.value * (+select.value) })
+				price: +input.value * (+select.value),
+				count: +input.value  })
 		});
 		// console.log(appData.screens);
 	},
@@ -145,8 +149,12 @@ const appData = {
 		appData.servicePricesPercent = 0
 		appData.fullPrice = 0
 		appData.servicePricesNumber = 0
+		appData.screenCount = 0
 		appData.screenPrice = appData.screens.reduce(function (sum, item) {
 			return sum + item['price']
+		}, 0);
+		appData.screenCount = appData.screens.reduce(function (sum, item) {
+			return sum + item['count']
 		}, 0);
 		for (let key in appData.servicesNumber) {
 			appData.servicePricesNumber += appData.servicesNumber[key]
