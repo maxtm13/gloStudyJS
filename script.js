@@ -16,6 +16,10 @@ const totalOther = document.querySelector('#total-count-other')
 const totalRollBack = document.querySelector('#total-count-rollback')
 const screenCount = document.querySelector('#total-count')
 const resetBtn = document.getElementById('reset')
+const cmsOpen = document.getElementById('cms-open')
+const cmVariants = document.querySelector('.hidden-cms-variants')
+const cmsSelect = cmVariants.querySelector('select')
+const otherCmsPercentValue = document.getElementById('cms-other-input')
 const appData = {
 	rollback: 0,
 	fullPrice: 0,
@@ -29,6 +33,8 @@ const appData = {
 	servicePricesNumber: 0,
 	servicePercentPrice: 0,
 	screenCount: 0,
+	cmsValue: 0,
+	cmsPricePercent: 0,
 	init: function () {
 
 		this.addTitle()
@@ -38,7 +44,9 @@ const appData = {
 		inputRange.addEventListener('input', this.setRange)
 		this.addEventinput()
 		resetBtn.addEventListener('click', this.reset.bind(this))
-
+		cmsOpen.addEventListener('change', this.cmsOpenChange)
+		cmsSelect.addEventListener('change', this.cmsSelectChange)
+		otherCmsPercentValue.addEventListener('input', this.otherCmsPercentValueInput)
 	},
 	start: function () {
 		// console.log('start');
@@ -52,6 +60,7 @@ const appData = {
 
 		this.showResult()
 		inputRange.addEventListener('input', this.rangeChange.bind(this))
+		
 		startBtn.disabled = true
 		screens.forEach(element => {
 			element.querySelector('select').disabled = true
@@ -59,6 +68,10 @@ const appData = {
 		});
 		startBtn.style.display = 'none'
 		resetBtn.style.display = 'flex'
+		document.querySelector('.main-controls__views.cms').querySelectorAll('input').forEach(element => {
+			element.disabled= true
+		});
+		document.querySelector('.main-controls__views.cms select').disabled = true
 	},
 	reset: () => {
 		screens.forEach((element, index) => {
@@ -82,6 +95,12 @@ const appData = {
 		for (let element of inputsTotal) {
 			element.value = '0'
 		}
+		cmsOpen.checked = false
+		cmsOpen.dispatchEvent(new Event('change'))
+		document.querySelector('.main-controls__views.cms').querySelectorAll('input').forEach(element => {
+			element.disabled = false
+		});
+		document.querySelector('.main-controls__views.cms select').disabled = false
 	},
 	addEventinput: function () {
 		let screen = document.querySelectorAll('.screen')
@@ -111,6 +130,33 @@ const appData = {
 	rangeChange: function () {
 		this.addPrices()
 		this.showResult()
+	},
+	cmsOpenChange : function(){
+		if (this.checked) { cmVariants.style.display = 'flex' } 
+		else {
+			cmVariants.style.display = 'none'
+			cmsSelect.options.selectedIndex = 0;
+			cmsSelect.dispatchEvent(new Event('change'))
+			appData.cmsPricePercent = false
+		}
+	}, 
+	cmsSelectChange: function (params) {
+		let cmsValue  = this.options[this.options.selectedIndex].value || false
+		appData.cmsValue = cmsValue;
+		if (cmsValue === '50') {
+			appData.cmsPricePercent = cmsValue
+			cmVariants.querySelector('.main-controls__input').style.display = 'none'
+		}  else if (cmsValue === 'other') {
+			cmVariants.querySelector('.main-controls__input').style.display= 'block'
+			appData.cmsPricePercent = cmsValue
+			return
+		} 
+		otherCmsPercentValue.value =''
+		appData.cmsPricePercent = cmsValue
+		cmVariants.querySelector('.main-controls__input').style.display = 'none'
+	},
+	otherCmsPercentValueInput :function () {
+		appData.cmsPricePercent = this.value
 	},
 	checkScreens: function () {
 		let screen = document.querySelectorAll('.screen')
@@ -189,7 +235,9 @@ const appData = {
 			this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key] / 100)
 		}
 		this.fullPrice = this.screenPrice + this.servicePricesPercent + this.servicePricesNumber;
-
+		if (this.cmsPricePercent) {
+			this.fullPrice += this.fullPrice * this.cmsPricePercent / 100
+		}
 		let spanRangeValue = spanRange.textContent.match(/\d+/)[0]
 
 		this.servicePercentPrice = Math.ceil(this.fullPrice - (this.fullPrice * (spanRangeValue / 100)))
