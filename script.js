@@ -23,14 +23,33 @@ DomElement.prototype.create = function() {
 	width : ${this.width};
 	background : ${this.bg};
 	font-size: ${this.fontSize};
+	position: absolute;
 	`
-	element.innerText = 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae vel accusamus vitae, velit maiores qui.'	
+	element.innerText = 'Lorem ipsum dolor, maiores qui.'	
 	document.body.appendChild(element)
 }
-
-let element1 = new DomElement('.wrapper', '100px', '200px' , 'red', '16px');
-let element2 = new DomElement('#article', '150px', '300px', 'aqua', '10px');
-console.log('element1', element1);
-console.log('element2', element2);
+let element1 = new DomElement('.wrapper', '100px', '100px' , 'red', '16px');
 element1.create()
-element2.create()
+document.addEventListener("DOMContentLoaded", function(){
+	console.log('loaded');
+	const square = document.querySelector('.wrapper')
+	document.addEventListener('keydown', (event) => {
+		// console.log(event);
+		switch (event.key) {
+			case 'ArrowUp':
+				square.style.top = +square.style.top.match(/\d+/) - 10 + 'px'
+				break;
+			case 'ArrowDown':
+				square.style.top = +square.style.top.match(/\d+/) + 10 + 'px'
+				break;
+			case 'ArrowLeft':
+				square.style.left = +square.style.left.match(/\d+/) - 10 + 'px'
+				break;
+			case 'ArrowRight':
+				square.style.left = +square.style.left.match(/\d+/) + 10 + 'px'
+				break;
+			default:
+				break;
+		}
+	})
+})
